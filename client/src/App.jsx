@@ -1,27 +1,60 @@
-import {Suspense, useDeferredValue, useEffect, useRef, useState} from 'react'
+import {Suspense, useEffect, useRef, useState} from 'react'
 import './App.css'
-import UpgradesList from "./components/UpgradesList.jsx";
+import UpgradesShop from "./components/shop/UpgradesShop.jsx";
+import LoadingElement from "./components/LoadingElement.jsx";
+import Cookie from "./components/cookie/Cookie.jsx";
+import {tickLoop, handleUpgrade} from "./GameFunctions.js";
+
+const TPS = 1;
 
 function App() {
+    // We're using loadingSuccess to track if loading works
+    const [loadingSuccess, setLoadingSuccess] = useState(null);
     const [upgrades, setUpgrades] = useState()
-    const deferred = useDeferredValue(upgrades)
-    const promise = useRef()
+
+    const [gameState, setGameState] = useState(() => {
+        let fetchedState = localStorage.getItem("game-state");
+        if (fetchedState !== null) {
+            return JSON.parse(fetchedState);
+        }
+        return {};
+    })
+
+    const upgradesDirty = useRef(true);
+    const tick = useRef(0);
+
     useEffect(() => {
-
-
-        promise.current = fetch("https://cookie-upgrade-api.vercel.app/api/upgrades")
+        fetch("https://tech-edu-week06-cookie-clicker-api.onrender.com/api/upgrades")
             .then((res) => res.json())
             .then((res) => {
-                console.log(res)
                 setUpgrades(res)
-            })
-
+                setLoadingSuccess(true)
+            }).catch(() => {
+            setLoadingSuccess(false)
+        });
     }, [])
+
+    useEffect(() => {
+        if (upgrades) {
+            const intervalID = setInterval(() => {
+                tick.current++
+                tickLoop(tick.current, TPS, setGameState, upgradesDirty, upgrades)
+            }, 1000 / TPS)
+
+            return () => clearInterval(intervalID)
+        }
+
+    }, [upgrades])
+
 
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
-                <UpgradesList upgrades={deferred}/>
+            <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
+                <div className="container">
+                    <Cookie gameState={gameState} updateGamestate={setGameState}/>
+                    <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}
+                                  upgradeDirtyRef={upgradesDirty}/>
+                </div>
             </Suspense>
         </>
     )

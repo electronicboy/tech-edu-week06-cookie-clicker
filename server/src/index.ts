@@ -12,10 +12,13 @@ app.use(express.json());
 app.use(cors())
 
 app.get("/api/upgrades", (req: Request, res: Response) => {
-    dataSource.getUpgrades().then(upgrades => {
-        res.json(upgrades);
-    })
-        .catch((err: Error) => {})
+    dataSource.getUpgrades()
+        .then(upgrades => {
+            res.json(upgrades).end();
+        })
+        .catch((err: Error) => {
+            res.status(500).json({"message": err.message}).end();
+        })
 })
 
 app.post("/api/upgrades", (req: Request, res: Response) => {
@@ -35,7 +38,9 @@ app.post("/api/upgrades", (req: Request, res: Response) => {
     }
 
     dataSource.addUpgrade(name, cost, increase)
-        .then(upgrade => {res.json(upgrade)})
+        .then(upgrade => {
+            res.json(upgrade)
+        })
         .catch((err: Error) => {
             res.status(500).json({"message": err.message}).end();
         })

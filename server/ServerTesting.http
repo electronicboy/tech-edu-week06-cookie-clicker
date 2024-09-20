@@ -13,3 +13,12 @@ Content-Type: application/json
 
 
 }
+
+###
+
+GET https://jsonplaceholder.typicode.com/todos/1
+
+
+###
+
+GET https://tech-edu-week06-cookie-clicker-api.onrender.com/api/upgrades
