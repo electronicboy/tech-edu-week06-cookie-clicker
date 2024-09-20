@@ -24,6 +24,7 @@ function App() {
 
     const upgradesDirty = useRef(true);
     const tick = useRef(0);
+    const teardown = useRef(false);
 
     useEffect(() => {
         fetch("https://tech-edu-week06-cookie-clicker-api.onrender.com/api/upgrades")
@@ -40,7 +41,9 @@ function App() {
         if (upgrades) {
             const intervalID = setInterval(() => {
                 tick.current++
-                tickLoop(tick.current, TPS, setGameState, upgradesDirty, upgrades)
+                if (!teardown.current) {
+                    tickLoop(tick.current, TPS, setGameState, upgradesDirty, upgrades)
+                }
             }, 1000 / TPS)
 
             return () => clearInterval(intervalID)

@@ -28,12 +28,13 @@
  *
  */
 export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrades) {
+    const upgradesState = upgradesStateDirty.current
     updateGameState(currentGameState => {
         /** @type {gameState} */
-        const newGameState = {...currentGameState}; // create a copy;
+        let newGameState = currentGameState; // create a copy;
 
         // We only need to recalculate this if the update state is dirty
-        if (upgradesStateDirty.current) {
+        if (upgradesState) {
             let cps = 0;
             if (newGameState.upgrades != null) {
                 for (let upgrade of upgrades) {
@@ -44,13 +45,12 @@ export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrade
                 }
             }
 
-            newGameState.cachedCPS = cps;
-            upgradesStateDirty.current = false;
+            newGameState = {...newGameState, cachedCPS: cps}
         }
 
         let currentCPS = newGameState.cachedCPS || 0;
 
-        newGameState.cookies = (newGameState.cookies || 0) + (currentCPS / tps);
+        newGameState = {...newGameState, cookies: (newGameState.cookies || 0) + (currentCPS / tps)}
 
         return newGameState;
     })
@@ -63,30 +63,37 @@ export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrade
             return current; // No update, will clean
         })
     }
+
+    upgradesStateDirty.current = false;
 }
 
 /**
  *
- * @param {updateGameState} gameState
+ * @param existingGameState
+ * @param updateGameState
  * @param {upgrade} upgrade
  * @return {boolean} was the upgrade a success?
  */
-export function handleUpgrade(gameState, updateGameState, upgrade) {
+export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     let ret = false;
     // This is more complex, as StrictMode causes state updaters to double run, so, we'll operate on the raw state
     // and then set a copy if something actually changes
 
+    let gameState = {...existingGameState}
     if (gameState.cookies >= upgrade.cost) {
         gameState.cookies -= upgrade.cost;
 
         if (!gameState.upgrades) {
             gameState.upgrades = [];
         }
-        gameState.upgrades[upgrade.id] += 1;
+        const currentVal = gameState.upgrades[upgrade.id];
+        gameState.upgrades[upgrade.id] = (currentVal || 0) + 1;
         ret = true;
     }
     if (ret) {
-        updateGameState({...gameState})
+        updateGameState(storedGameState => {
+            return {...storedGameState, upgrades: gameState.upgrades};
+        })
     }
     return ret;
 }
@@ -96,11 +103,16 @@ export function handleUpgrade(gameState, updateGameState, upgrade) {
  * @param {updateGameState} gameState
  */
 export function handleClick(updateGameState) {
+    console.log(updateGameState);
     updateGameState(gameState => {
-        return {
-            ...gameState,
-            cookies: gameState.cookies + gameState.cachedCPS
+        console.log(gameState);
+        const newState = {
+        ...gameState,
+            cookies: gameState.cookies + (gameState.cachedCPS | 1)
         }
+        console.log(newState);
+
+        return newState
     })
 
 }

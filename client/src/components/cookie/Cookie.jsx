@@ -18,7 +18,7 @@ export default function Cookie({ gameState, updateGamestate }) {
           <img
             src="/img/cookie.png"
             alt="cookie"
-            onClick={() => handleClick(updateGamestate)}
+            onClick={() => {handleClick(updateGamestate); console.log(gameState.cookies.toFixed(1))}}
             draggable={false}
           />
         </div>
