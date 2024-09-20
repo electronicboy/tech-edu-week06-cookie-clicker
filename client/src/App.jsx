@@ -1,9 +1,10 @@
 import {Suspense, useEffect, useRef, useState} from 'react'
 import './App.css'
 import UpgradesShop from "./components/shop/UpgradesShop.jsx";
-import LoadingElement from "./components/LoadingElement.jsx";
+import LoadingElement from "./components/structure/LoadingElement.jsx";
 import Cookie from "./components/cookie/Cookie.jsx";
 import {tickLoop, handleUpgrade} from "./GameFunctions.js";
+import Header from "./components/structure/Header.jsx";
 
 const TPS = 1;
 
@@ -13,11 +14,12 @@ function App() {
     const [upgrades, setUpgrades] = useState()
 
     const [gameState, setGameState] = useState(() => {
+        let defaultData = {cookies: 0, cachedCPS: 0, upgrades: []}
         let fetchedState = localStorage.getItem("game-state");
         if (fetchedState !== null) {
-            return JSON.parse(fetchedState);
+            return {...defaultData, ...JSON.parse(fetchedState)}
         }
-        return {};
+        return defaultData;
     })
 
     const upgradesDirty = useRef(true);
@@ -50,6 +52,7 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
+                <Header />
                 <div className="container">
                     <Cookie gameState={gameState} updateGamestate={setGameState}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}

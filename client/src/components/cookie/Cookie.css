@@ -1,0 +1,23 @@
+.cookie-image-container {
+    height: 100%;
+    width: 100%;
+    /* Prevent the rotating img from modifying the document size*/
+    overflow: hidden;
+}
+
+.cookie-image-container > img {
+    width: 100%;
+    height: 100%;
+    /* but, also, don't squash the poor img to try to maintain fitting the document */
+    object-fit: cover;
+    animation: cookie 4s linear infinite;
+}
+
+@keyframes cookie {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

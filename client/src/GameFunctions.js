@@ -34,7 +34,7 @@ export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrade
 
         // We only need to recalculate this if the update state is dirty
         if (upgradesStateDirty.current) {
-            let cps = 1;
+            let cps = 0;
             if (newGameState.upgrades != null) {
                 for (let upgrade of upgrades) {
                     let totalUpgrade = newGameState.upgrades[upgrade.id];
@@ -48,9 +48,8 @@ export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrade
             upgradesStateDirty.current = false;
         }
 
-        let currentCPS = newGameState.cachedCPS || 1;
+        let currentCPS = newGameState.cachedCPS || 0;
 
-        console.log(newGameState)
         newGameState.cookies = (newGameState.cookies || 0) + (currentCPS / tps);
 
         return newGameState;
