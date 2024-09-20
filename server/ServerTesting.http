@@ -1,0 +1,15 @@
+
+### GET UPGRADES
+GET http://localhost:8081/api/upgrades
+
+### POST UPGRADE
+POST http://localhost:8081/api/upgrades
+Content-Type: application/json
+
+{
+  "name": "totes cool",
+  "cost": 100,
+  "increase": 10000
+
+
+}
