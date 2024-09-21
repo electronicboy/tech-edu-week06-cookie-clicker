@@ -3,7 +3,7 @@ import './App.css'
 import UpgradesShop from "./components/shop/UpgradesShop.jsx";
 import LoadingElement from "./components/structure/LoadingElement.jsx";
 import Cookie from "./components/cookie/Cookie.jsx";
-import {tickLoop, handleUpgrade} from "./GameFunctions.js";
+import {tickLoop} from "./GameFunctions.js";
 import Header from "./components/structure/Header.jsx";
 
 const TPS = 1;
@@ -25,6 +25,21 @@ function App() {
     const upgradesDirty = useRef(true);
     const tick = useRef(0);
     const teardown = useRef(false);
+
+    // State
+    const doReset = useRef(false)
+
+    if (doReset.current) {
+        localStorage.removeItem("game-state");
+        location.reload();
+    }
+
+    function resetGame() {
+        teardown.current = true;
+        doReset.current = true;
+        // triggers a re-render which will hit the logic above
+        setGameState({})
+    }
 
     useEffect(() => {
         fetch("https://tech-edu-week06-cookie-clicker-api.onrender.com/api/upgrades")
@@ -55,7 +70,7 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
-                <Header />
+                <Header resetFunct={resetGame}/>
                 <div className="container">
                     <Cookie gameState={gameState} updateGamestate={setGameState}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}

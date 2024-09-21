@@ -11,6 +11,9 @@
 /*  grid-column-gap: 4rem;*/
 /*}*/
 
+header {
+  position: relative;
+}
 .container {
   display: flex;
 }

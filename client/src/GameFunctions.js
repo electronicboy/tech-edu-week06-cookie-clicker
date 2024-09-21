@@ -146,7 +146,9 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     }
     if (ret) {
         updateGameState((storedGameState) => {
-            return {...storedGameState, upgrades: gameState.upgrades};
+            return {...storedGameState,
+                cookies: gameState.cookies,
+                upgrades: gameState.upgrades};
         });
     }
     return ret;
@@ -176,7 +178,6 @@ export function handleClick(updateGameState, event) {
             ...gameState,
             cookies: gameState.cookies + (gameState.cachedClickRate | 1),
         };
-        console.log(newState);
 
         return newState;
     });
