@@ -103,9 +103,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
  * @param {updateGameState} gameState
  */
 export function handleClick(updateGameState) {
-    console.log(updateGameState);
     updateGameState(gameState => {
-        console.log(gameState);
         const newState = {
         ...gameState,
             cookies: gameState.cookies + (gameState.cachedCPS | 1)
