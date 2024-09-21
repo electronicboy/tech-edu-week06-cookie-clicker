@@ -26,7 +26,7 @@
  * @return {gameState} game state
  */
 
-const upgradeType = ["CPS", "CLICK", "CLICK_MULTI"];
+const upgradeType = ["CPS", "CLICK", "CLICK_MULTI", "CLICK_RATE_CPS"];
 
 /**
  *
