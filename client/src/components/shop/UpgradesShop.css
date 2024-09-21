@@ -3,10 +3,10 @@
 }
 
 .upgrades-shop {
-    border: 0.3rem darkred solid;
+    /*border: 0.3rem darkred solid;*/
     border-radius: 1rem;
     width: fit-content;
-    padding: 1rem;
+    /*padding: 1rem;*/
 }
 
 .upgrades-shop-header {

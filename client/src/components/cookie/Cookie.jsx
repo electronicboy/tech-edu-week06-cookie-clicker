@@ -1,6 +1,7 @@
 import { handleClick } from "../../GameFunctions.js";
 import PropTypes from "prop-types";
 import "./Cookie.css";
+import { useRef } from "react";
 
 /**
  *
@@ -10,6 +11,7 @@ import "./Cookie.css";
  * @constructor
  */
 export default function Cookie({ gameState, updateGamestate }) {
+  const image = useRef();
   return (
     <>
       <div className="cookie-container">
@@ -19,9 +21,10 @@ export default function Cookie({ gameState, updateGamestate }) {
         </div>
         <div className="cookie-image-container">
           <img
+            ref={image}
             src="/img/cookie.png"
             alt="cookie"
-            onClick={() => handleClick(updateGamestate)}
+            onClick={(event) => handleClick(updateGamestate, event, image)}
             draggable={false}
           />
         </div>

@@ -16,7 +16,7 @@ export default function UpgradeItem({ gameState, item, upgradeCB }) {
             : "0")}
       </span>
       <button className={"shop-button" } disabled={!purchasable} onClick={() => upgradeCB(item)}>
-        Upgrade ${formatCurrency(item.cost)}
+        🍪{formatCurrency(item.cost)}
       </button>
     </div>
   );

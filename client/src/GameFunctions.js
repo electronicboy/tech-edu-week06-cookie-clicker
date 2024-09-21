@@ -102,8 +102,26 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
  *
  * @param {updateGameState} gameState
  */
-export function handleClick(updateGameState) {
+export function handleClick(updateGameState, event, ref) {
+    const htmlElement = ref.current;
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+
+
+    console.log(ref)
     updateGameState(gameState => {
+        const plusDisp = document.createElement("div")
+        plusDisp.textContent = (gameState.cachedCPS | 1);
+        plusDisp.style.left = `${clickX}px`;
+        plusDisp.style.top = `${clickY}px`;
+        document.body.appendChild(plusDisp);
+        plusDisp.classList.add("plus")
+
+        plusDisp.addEventListener('animationend', () => {
+            plusDisp.remove();
+        })
+
+
         const newState = {
         ...gameState,
             cookies: gameState.cookies + (gameState.cachedCPS | 1)

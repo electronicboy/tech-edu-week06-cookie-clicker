@@ -27,3 +27,24 @@
         transform: rotate(360deg);
     }
 }
+
+.plus {
+    position: absolute;
+    color: red;
+    font-size: 2rem;
+    animation: moveUpFade 1s forwards;
+    pointer-events: none;
+    left: 50%;
+    transform: translateX(-100%);
+}
+
+@keyframes moveUpFade {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
