@@ -102,8 +102,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
  *
  * @param {updateGameState} gameState
  */
-export function handleClick(updateGameState, event, ref) {
-    const htmlElement = ref.current;
+export function handleClick(updateGameState, event) {
     const clickX = event.clientX;
     const clickY = event.clientY;
 

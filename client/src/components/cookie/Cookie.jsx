@@ -11,7 +11,6 @@ import { useRef } from "react";
  * @constructor
  */
 export default function Cookie({ gameState, updateGamestate }) {
-  const image = useRef();
   return (
     <>
       <div className="cookie-container">
@@ -21,10 +20,9 @@ export default function Cookie({ gameState, updateGamestate }) {
         </div>
         <div className="cookie-image-container">
           <img
-            ref={image}
             src="/img/cookie.png"
             alt="cookie"
-            onClick={(event) => handleClick(updateGamestate, event, image)}
+            onClick={(event) => handleClick(updateGamestate, event)}
             draggable={false}
           />
         </div>
