@@ -13,7 +13,10 @@ export default function Cookie({ gameState, updateGamestate }) {
   return (
     <>
       <div className="cookie-container">
-        <p>{gameState.cookies.toFixed(0)} cookies</p>
+        <div className="game-info-container">
+          <p>{gameState.cookies.toFixed(0)} cookies</p>
+          <p>{gameState.cachedCPS} CPS</p>
+        </div>
         <div className="cookie-image-container">
           <img
             src="/img/cookie.png"

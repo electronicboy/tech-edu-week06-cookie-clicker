@@ -20,22 +20,25 @@ export default function UpgradesShop({
 }) {
   if (!upgrades) throw new Promise((resolve) => setTimeout(resolve, 1000));
   return (
-    <div className="upgrades-shop">
-      <div className="upgrades-shop-header">
-        <span>Upgrades</span>
-      </div>
-      <div className="upgradesList">
-        {upgrades.map((upgrade) => (
-          <UpgradeItem
-            key={upgrade.id}
-            item={upgrade}
-            upgradeCB={() => {
-              if (handleUpgrade(gameState, updateGamestate, upgrade)) {
-                upgradeDirtyRef.current = true;
-              }
-            }}
-          />
-        ))}
+    <div className="upgrades-shop-container">
+      <div className="upgrades-shop">
+        <div className="upgrades-shop-header">
+          <span>Upgrades</span>
+        </div>
+        <div className="upgrades-shop-items">
+          {upgrades.map((upgrade) => (
+            <UpgradeItem
+              key={upgrade.id}
+              gameState={gameState}
+              item={upgrade}
+              upgradeCB={() => {
+                if (handleUpgrade(gameState, updateGamestate, upgrade)) {
+                  upgradeDirtyRef.current = true;
+                }
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -114,3 +114,15 @@ export function handleClick(updateGameState) {
     })
 
 }
+
+/**
+ * produces text to render
+ * @param upgrade
+ */
+export function upgradeDisplay(upgrade) {
+    return `+${upgrade.increase} CPS`
+}
+
+export function canPurchase(gameState, upgrade, amount) {
+    return gameState.cookies >= upgrade.cost * amount;
+}

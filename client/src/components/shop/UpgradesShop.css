@@ -1,0 +1,23 @@
+.upgrades-shop-container {
+    margin: 1rem;
+}
+
+.upgrades-shop {
+    border: 0.3rem darkred solid;
+    border-radius: 1rem;
+    width: fit-content;
+    padding: 1rem;
+}
+
+.upgrades-shop-header {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.upgrades-shop-items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem
+}
