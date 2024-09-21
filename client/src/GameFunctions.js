@@ -72,21 +72,22 @@ export function tickLoop(
                 }
 
                 while (pendingUpgrades.length > 0) {
-                    const upgrade = pendingUpgrades.pop();
+                    const upgrade = pendingUpgrades.shift();
                     const type = upgradeType[upgrade.upgrade.type];
                     const amount = upgrade.upgrade.amount;
+                    const upgradeAmount = newGameState.upgrades[upgrade.id]
                     switch (type) {
                         case "CPS":
                             // We handled this above
                             break;
                         case "CLICK":
-                            clickRate += amount;
+                            clickRate += (amount * upgradeAmount);
                             break;
                         case "CLICK_MULTI":
-                            clickRate *= amount;
+                            clickRate *= (amount * upgradeAmount);
                             break;
                         case "CLICK_RATE_CPS":
-                            clickRate = clickRate + (cps * amount)
+                            clickRate = clickRate + (cps * (amount * upgradeAmount))
                     }
                 }
             }
@@ -132,7 +133,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     // This is more complex, as StrictMode causes state updaters to double run, so, we'll operate on the raw state
     // and then set a copy if something actually changes
 
-    let gameState = { ...existingGameState };
+    let gameState = {...existingGameState};
     if (gameState.cookies >= upgrade.cost) {
         gameState.cookies -= upgrade.cost;
 
@@ -145,7 +146,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     }
     if (ret) {
         updateGameState((storedGameState) => {
-            return { ...storedGameState, upgrades: gameState.upgrades };
+            return {...storedGameState, upgrades: gameState.upgrades};
         });
     }
     return ret;
@@ -196,6 +197,8 @@ export function upgradeDisplay(upgrade) {
                 return `+${amount} CLICK`;
             case "CLICK_MULTI":
                 return `*${amount} CLICK`;
+            case "CLICK_RATE_CPS":
+                return `+${amount} * CPS CLICK`
         }
     }
     return `+${upgrade.increase} CPS`;
