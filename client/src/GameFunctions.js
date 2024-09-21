@@ -2,6 +2,7 @@
  * @namespace gameState
  * @property {number} cookies
  * @property {number} cachedCPS
+ * @property {number} cachedClickRate
  * @property {Array<number>} upgrades
  */
 
@@ -10,6 +11,13 @@
  * @property {number} id
  * @property {number} cost
  * @property {number} increase
+ * @property {upgradeMeta} upgrade
+ */
+
+/**
+ * @namespace upgradeMeta
+ * @property {number} type an index of the enum type
+ * @property {number} amount
  */
 
 /**
@@ -18,50 +26,95 @@
  * @return {gameState} game state
  */
 
+const upgradeType = ["CPS", "CLICK", "CLICK_MULTI"];
+
 /**
  *
  * @param {number} tick current tick
  * @param {number} tps how frequently the game should tick
  * @param {updateGameState} updateGameState callback to update current game state object
  * @param {MutableRefObject} upgradesStateDirty the {@link useRef} which lets us track if the update list has been modified
- * @param {Array<upgrades>} upgrades
+ * @param {Array<upgrade>} upgrades
  *
  */
-export function tickLoop(tick, tps, updateGameState, upgradesStateDirty, upgrades) {
-    const upgradesState = upgradesStateDirty.current
-    updateGameState(currentGameState => {
+export function tickLoop(
+    tick,
+    tps,
+    updateGameState,
+    upgradesStateDirty,
+    upgrades,
+) {
+    const upgradesState = upgradesStateDirty.current;
+    updateGameState((currentGameState) => {
         /** @type {gameState} */
         let newGameState = currentGameState; // create a copy;
 
         // We only need to recalculate this if the update state is dirty
         if (upgradesState) {
             let cps = 0;
+            let clickRate = 1;
             if (newGameState.upgrades != null) {
+                /** @type {Array<upgrade>} */
+                let pendingUpgrades = [];
                 for (let upgrade of upgrades) {
                     let totalUpgrade = newGameState.upgrades[upgrade.id];
                     if (totalUpgrade) {
-                        cps += upgrade.increase * totalUpgrade;
+                        if (upgrade.upgrade) {
+                            if (upgrade.upgrade.type === 0) {
+                                cps += upgrade.upgrade.amount * totalUpgrade;
+                            } else {
+                                pendingUpgrades.push(upgrade);
+                            }
+                        } else {
+                            cps += upgrade.increase * totalUpgrade;
+                        }
+                    }
+                }
+
+                while (pendingUpgrades.length > 0) {
+                    const upgrade = pendingUpgrades.pop();
+                    const type = upgradeType[upgrade.upgrade.type];
+                    const amount = upgrade.upgrade.amount;
+                    switch (type) {
+                        case "CPS":
+                            // We handled this above
+                            break;
+                        case "CLICK":
+                            clickRate += amount;
+                            break;
+                        case "CLICK_MULTI":
+                            clickRate *= amount;
+                            break;
+                        case "CLICK_RATE_CPS":
+                            clickRate = clickRate + (cps * amount)
                     }
                 }
             }
 
-            newGameState = {...newGameState, cachedCPS: cps}
+            newGameState = {
+                ...newGameState,
+                cachedCPS: cps,
+                cachedClickRate: clickRate,
+            };
         }
 
         let currentCPS = newGameState.cachedCPS || 0;
 
-        newGameState = {...newGameState, cookies: (newGameState.cookies || 0) + (currentCPS / tps)}
+        newGameState = {
+            ...newGameState,
+            cookies: (newGameState.cookies || 0) + currentCPS / tps,
+        };
 
         return newGameState;
-    })
+    });
 
     if (tick % 5 === 0) {
-        updateGameState(current => {
+        updateGameState((current) => {
             if (!localStorage.getItem("save-off")) {
                 localStorage.setItem("game-state", JSON.stringify(current));
             }
             return current; // No update, will clean
-        })
+        });
     }
 
     upgradesStateDirty.current = false;
@@ -79,7 +132,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     // This is more complex, as StrictMode causes state updaters to double run, so, we'll operate on the raw state
     // and then set a copy if something actually changes
 
-    let gameState = {...existingGameState}
+    let gameState = { ...existingGameState };
     if (gameState.cookies >= upgrade.cost) {
         gameState.cookies -= upgrade.cost;
 
@@ -91,9 +144,9 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
         ret = true;
     }
     if (ret) {
-        updateGameState(storedGameState => {
-            return {...storedGameState, upgrades: gameState.upgrades};
-        })
+        updateGameState((storedGameState) => {
+            return { ...storedGameState, upgrades: gameState.upgrades };
+        });
     }
     return ret;
 }
@@ -106,30 +159,26 @@ export function handleClick(updateGameState, event) {
     const clickX = event.clientX;
     const clickY = event.clientY;
 
-
-    console.log(ref)
-    updateGameState(gameState => {
-        const plusDisp = document.createElement("div")
-        plusDisp.textContent = (gameState.cachedCPS | 1);
+    updateGameState((gameState) => {
+        const plusDisp = document.createElement("div");
+        plusDisp.textContent = gameState.cachedClickRate | 1;
         plusDisp.style.left = `${clickX}px`;
         plusDisp.style.top = `${clickY}px`;
         document.body.appendChild(plusDisp);
-        plusDisp.classList.add("plus")
+        plusDisp.classList.add("plus");
 
-        plusDisp.addEventListener('animationend', () => {
+        plusDisp.addEventListener("animationend", () => {
             plusDisp.remove();
-        })
-
+        });
 
         const newState = {
-        ...gameState,
-            cookies: gameState.cookies + (gameState.cachedCPS | 1)
-        }
+            ...gameState,
+            cookies: gameState.cookies + (gameState.cachedClickRate | 1),
+        };
         console.log(newState);
 
-        return newState
-    })
-
+        return newState;
+    });
 }
 
 /**
@@ -137,7 +186,19 @@ export function handleClick(updateGameState, event) {
  * @param upgrade
  */
 export function upgradeDisplay(upgrade) {
-    return `+${upgrade.increase} CPS`
+    if (upgrade.upgrade) {
+        const type = upgradeType[upgrade.upgrade.type];
+        const amount = upgrade.upgrade.amount;
+        switch (type) {
+            case "CPS":
+                return `+${amount} CPS`;
+            case "CLICK":
+                return `+${amount} CLICK`;
+            case "CLICK_MULTI":
+                return `*${amount} CLICK`;
+        }
+    }
+    return `+${upgrade.increase} CPS`;
 }
 
 export function canPurchase(gameState, upgrade, amount) {
