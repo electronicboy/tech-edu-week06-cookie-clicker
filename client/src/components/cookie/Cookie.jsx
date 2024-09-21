@@ -1,7 +1,6 @@
 import { handleClick } from "../../GameFunctions.js";
 import PropTypes from "prop-types";
 import "./Cookie.css";
-import { useRef } from "react";
 
 /**
  *
