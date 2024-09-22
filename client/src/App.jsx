@@ -6,7 +6,7 @@ import Cookie from "./components/cookie/Cookie.jsx";
 import {tickLoop} from "./GameFunctions.js";
 import Header from "./components/structure/Header.jsx";
 
-const TPS = 1;
+const TPS = 10;
 
 function App() {
     // We're using loadingSuccess to track if loading works
