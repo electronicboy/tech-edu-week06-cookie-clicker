@@ -15,3 +15,13 @@ export function formatCurrency(currency) {
     // https://stackoverflow.com/questions/3612744/remove-insignificant-trailing-zeros-from-a-number
     return Number(currencyVal.toFixed(2)) + currencyFormat
 }
+
+/**
+ *
+ * @template T
+ * @param {Array<T>} array
+ * @returns {T}
+ */
+export function randomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}

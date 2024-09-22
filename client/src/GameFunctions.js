@@ -20,6 +20,8 @@
  * @property {number} amount
  */
 
+import {randomElement} from "./util.js";
+
 /**
  * @callback updateGameState
  * @param {gameState} cb game state
@@ -154,19 +156,29 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
     return ret;
 }
 
+const sounds = ["/sound/ui-click-43196.mp3", "/sound/ui-click-97915.mp3"]
 /**
  *
  * @param {updateGameState} gameState
+ * @param {MouseEvent} event
+ * @param {boolean} doSound
  */
-export function handleClick(updateGameState, event) {
+export function handleClick(updateGameState, event, doSound) {
     const clickX = event.clientX;
     const clickY = event.clientY;
+
+    if (doSound) {
+        const randSound = randomElement(sounds);
+        new Audio(randSound).play().catch(() => {})
+    }
 
     updateGameState((gameState) => {
         const plusDisp = document.createElement("div");
         plusDisp.textContent = gameState.cachedClickRate | 1;
-        plusDisp.style.left = `${clickX}px`;
-        plusDisp.style.top = `${clickY}px`;
+        const offsetY = (Math.random() * 50) - 25;
+        const offsetX = (Math.random() * 50) - 25;
+        plusDisp.style.left = `${clickX + offsetX}px`;
+        plusDisp.style.top = `${clickY + offsetY}px`;
         document.body.appendChild(plusDisp);
         plusDisp.classList.add("plus");
 

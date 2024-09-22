@@ -9,7 +9,7 @@ import "./Cookie.css";
  * @returns {JSX.Element}
  * @constructor
  */
-export default function Cookie({gameState, updateGamestate}) {
+export default function Cookie({gameState, updateGamestate, muteRef}) {
     return (
         <>
             <div className="cookie-container">
@@ -21,7 +21,7 @@ export default function Cookie({gameState, updateGamestate}) {
                     <img
                         src="/img/cookie.png"
                         alt="cookie"
-                        onClick={(event) => handleClick(updateGamestate, event)}
+                        onClick={(event) => handleClick(updateGamestate, event, !muteRef.current)}
                         draggable={false}
                     />
                 </div>
@@ -37,4 +37,5 @@ Cookie.propTypes = {
         upgrades: PropTypes.arrayOf(PropTypes.number),
     }),
     updateGamestate: PropTypes.func,
+    muteRef: PropTypes.object,
 };

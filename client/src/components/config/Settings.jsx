@@ -2,7 +2,7 @@ import './Settings.css'
 import {useRef} from "react";
 import PropTypes from "prop-types";
 
-export default function Settings({resetFunct}) {
+export default function Settings({resetFunct, toggleMusic}) {
     const settings = useRef()
     const settingsMenu = useRef(null)
 
@@ -20,15 +20,20 @@ export default function Settings({resetFunct}) {
         <>
             <div className="settings">
                 <div ref={settings} className="settings-button" onClick={() => toggleMenu()}>⚙️</div>
-                <div ref={settingsMenu} className="settings-menu" style={{fontSize: "1rem"}}>
-                    <button onClick={resetFunct}>Reset Game</button>
-
+                <div ref={settingsMenu} className="settings-menu" style={{display: "none"}}>
+                    <div>
+                        <button onClick={resetFunct}>Reset Game</button>
+                    </div>
+                    <div>
+                        <button onClick={toggleMusic}>Toggle Music</button>
+                    </div>
+                    </div>
                 </div>
-            </div>
-        </>
+            </>
     )
 }
 
 Settings.propTypes = {
-    resetFunct: PropTypes.func.isRequired
+    resetFunct: PropTypes.func.isRequired,
+    toggleMusic: PropTypes.func.isRequired,
 }

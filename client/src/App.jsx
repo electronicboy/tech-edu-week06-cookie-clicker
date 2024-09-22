@@ -14,7 +14,7 @@ function App() {
     const [upgrades, setUpgrades] = useState()
 
     const [gameState, setGameState] = useState(() => {
-        let defaultData = {cookies: 0, cachedCPS: 0, upgrades: []}
+        let defaultData = {cookies: 0, cachedCPS: 0, upgrades: [], clicks: 0}
         let fetchedState = localStorage.getItem("game-state");
         if (fetchedState !== null) {
             return {...defaultData, ...JSON.parse(fetchedState)}
@@ -25,6 +25,7 @@ function App() {
     const upgradesDirty = useRef(true);
     const tick = useRef(0);
     const teardown = useRef(false);
+    const mute = useRef(false);
 
     // State
     const doReset = useRef(false)
@@ -39,6 +40,10 @@ function App() {
         doReset.current = true;
         // triggers a re-render which will hit the logic above
         setGameState({})
+    }
+
+    function toggleMusic() {
+        mute.current = !mute.current;
     }
 
     useEffect(() => {
@@ -70,11 +75,11 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
-                <Header resetFunct={resetGame}/>
+                <Header resetFunct={resetGame} toggleMusic={toggleMusic} />
                 <div className="container">
-                    <Cookie gameState={gameState} updateGamestate={setGameState}/>
+                    <Cookie gameState={gameState} updateGamestate={setGameState} muteRef={mute}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}
-                                  upgradeDirtyRef={upgradesDirty}/>
+                                  upgradeDirtyRef={upgradesDirty} muteRef={mute}/>
                 </div>
             </Suspense>
         </>

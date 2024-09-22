@@ -2,7 +2,11 @@
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.settings-button {
     font-size: 3rem;
+    text-align: right;
 }
 
 .settings-menu {
