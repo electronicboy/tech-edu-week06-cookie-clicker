@@ -1,4 +1,4 @@
-import {Suspense, useEffect, useRef, useState} from 'react'
+import {Suspense, useEffect, useMemo, useRef, useState} from 'react'
 import './App.css'
 import UpgradesShop from "./components/shop/UpgradesShop.jsx";
 import LoadingElement from "./components/structure/LoadingElement.jsx";
@@ -58,6 +58,7 @@ function App() {
             setLoadingSuccess(false)
         });
         audioPlayer.current.volume = 0.05;
+        audioPlayer.current.loop = true;
     }, [])
 
     useEffect(() => {
@@ -85,7 +86,8 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
-                <Header resetFunct={resetGame} toggleMusic={toggleMusic} giveCookies={(amount) => giveCookies(setGameState, amount)}/>
+                <Header resetFunct={resetGame} toggleMusic={toggleMusic}
+                        giveCookies={(amount) => giveCookies(setGameState, amount)}/>
                 <div className="container">
                     <Cookie gameState={gameState} updateGamestate={setGameState} muteRef={mute}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}
