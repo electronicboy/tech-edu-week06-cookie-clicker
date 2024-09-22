@@ -6,7 +6,13 @@
 export function formatCurrency(currency) {
     let currencyVal = currency;
     let currencyFormat = "";
-    [{div: 1000, format: "K"}].forEach((sect) => {
+    [
+        {div: 1000, format: "K"},
+        {div: 1000, format: "M"},
+        {div: 1000, format: "B"},
+        {div: 1000, format: "T"},
+        {div: 1000, format: "G"}
+    ].forEach((sect) => {
         if (currencyVal >= sect.div) {
             currencyVal = currencyVal / sect.div
             currencyFormat = sect.format

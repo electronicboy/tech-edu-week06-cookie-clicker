@@ -4,7 +4,7 @@
 
 .game-info-container {
     font-weight: bold;
-    font-size: 1.5rem;
+    /*font-size: 1.5rem;*/
 }
 
 .cookie-image-container {
@@ -19,6 +19,11 @@
     animation: cookie 4s linear infinite;
 }
 
+.game-info-pop {
+    font-weight: 800;
+    font-size: 1.8rem;
+    margin-bottom: 0.1rem;
+}
 @keyframes cookie {
     from {
         transform: rotate(0deg)

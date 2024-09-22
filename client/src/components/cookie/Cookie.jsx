@@ -1,6 +1,7 @@
 import {handleClick} from "../../GameFunctions.js";
 import PropTypes from "prop-types";
 import "./Cookie.css";
+import {formatCurrency} from "../../util.js";
 
 /**
  *
@@ -14,8 +15,11 @@ export default function Cookie({gameState, updateGamestate, muteRef}) {
         <>
             <div className="cookie-container">
                 <div className="game-info-container">
-                    <p>{gameState.cookies.toFixed(0)} cookies</p>
-                    <p>{gameState.cachedCPS} CPS</p>
+                    <p className="game-info-pop">{formatCurrency(gameState.cookies)}</p>
+                    <span>Cookies</span>
+
+                    <p className="game-info-pop">{formatCurrency(gameState.cachedCPS)}</p>
+                    <p>CPS</p>
                 </div>
                 <div className="cookie-image-container">
                     <img

@@ -31,13 +31,25 @@ export default function Settings({resetFunct, toggleMusic, giveCookies}) {
         </div>
     </>
 
+    /**
+     *
+     * @param {MouseEvent} e
+     */
+    function doResetGated(e) {
+        if (!e.shiftKey) {
+            alert("hold shift and click to confirm!")
+        } else {
+            resetFunct()
+        }
+    }
+
     return (
         <>
             <div className="settings">
                 <div ref={settings} className="settings-button" onClick={(e) => toggleMenu(e)}>⚙️</div>
                 <div ref={settingsMenu} className="settings-menu" style={{display: "none"}}>
                     <div>
-                        <button onClick={resetFunct}>Reset Game</button>
+                        <button onClick={doResetGated}>Reset Game</button>
                     </div>
                     <div>
                         <button onClick={toggleMusic}>Toggle Music</button>
