@@ -11,6 +11,10 @@ dotenv.config();
 app.use(express.json());
 app.use(cors())
 
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).send({message: "What are you looking at?"})
+})
+
 app.get("/api/upgrades", (req: Request, res: Response) => {
     dataSource.getUpgrades()
         .then(upgrades => {
