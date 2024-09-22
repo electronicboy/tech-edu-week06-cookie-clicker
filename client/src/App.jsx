@@ -3,7 +3,7 @@ import './App.css'
 import UpgradesShop from "./components/shop/UpgradesShop.jsx";
 import LoadingElement from "./components/structure/LoadingElement.jsx";
 import Cookie from "./components/cookie/Cookie.jsx";
-import {tickLoop} from "./GameFunctions.js";
+import {giveCookies, tickLoop} from "./GameFunctions.js";
 import Header from "./components/structure/Header.jsx";
 
 const TPS = 10;
@@ -85,7 +85,7 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
-                <Header resetFunct={resetGame} toggleMusic={toggleMusic}/>
+                <Header resetFunct={resetGame} toggleMusic={toggleMusic} giveCookies={(amount) => giveCookies(setGameState, amount)}/>
                 <div className="container">
                     <Cookie gameState={gameState} updateGamestate={setGameState} muteRef={mute}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}

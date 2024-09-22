@@ -196,6 +196,17 @@ export function handleClick(updateGameState, event, doSound) {
 }
 
 /**
+ *
+ * @param {updateGameState} gameState
+ * @param amount cookies to give
+ */
+export function giveCookies(updateGameState, amount) {
+    updateGameState(gameState => {
+        return {...gameState, cookies: gameState.cookies + amount};
+    })
+
+}
+/**
  * produces text to render
  * @param upgrade
  */
