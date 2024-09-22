@@ -64,7 +64,7 @@ function App() {
         if (upgrades) {
             const intervalID = setInterval(() => {
                 if (audioPlayer.current.paused && !mute.current) {
-                    audioPlayer.current.play().catch(_ => console.log(_));
+                    audioPlayer.current.play().catch(_ => _);
                 } else if (!audioPlayer.current.paused && mute.current) {
                     audioPlayer.current.pause()
                     audioPlayer.current.currentTime = 0
