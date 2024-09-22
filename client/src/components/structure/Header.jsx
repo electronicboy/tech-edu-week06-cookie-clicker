@@ -1,6 +1,5 @@
 import Settings from "../config/Settings.jsx";
 import PropTypes from "prop-types";
-import {giveCookies} from "../../GameFunctions.js";
 
 export default function Header({resetFunct, toggleMusic, giveCookies}) {
     return (<header>

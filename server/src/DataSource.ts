@@ -62,9 +62,10 @@ export class MemorySource implements DataSource {
    * i.e. without the future return, even though that is irrelevant here, this does
    * appease eslint without having danging promises
    *
-   * @param name
-   * @param cost
-   * @param increase
+   * @param {string} name name of the upgrade
+   * @param {number} cost cost of the upgrade
+   * @param {number} increase
+   * @param {UpgradeInfo} upgradeType
    * @private
    */
   private addUpgradeRaw(name: string, cost: number, increase: number, upgradeType: UpgradeInfo) {
@@ -73,7 +74,7 @@ export class MemorySource implements DataSource {
   }
 
   addUpgrade(name: string, cost: number, increase: number, upgradeType: UpgradeInfo): Promise<Upgrade> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       const upgrade = new Upgrade(this.upgrades.length, name, cost, increase, upgradeType);
       this.upgrades.push(upgrade);
       resolve(upgrade);
@@ -81,7 +82,7 @@ export class MemorySource implements DataSource {
   }
 
   getUpgrades(): Promise<Array<Upgrade>> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       resolve(this.upgrades);
     });
   }
@@ -89,12 +90,12 @@ export class MemorySource implements DataSource {
 
 export class PGSource implements DataSource {
   addUpgrade(name: string, cost: number, increase: number, upgradeType: UpgradeInfo): Promise<Upgrade> {
-    return new Promise((resolve, reject) => {
+    return new Promise((_, reject) => {
       reject(new Error("Method not implemented."));
     });
   }
 
   getUpgrades(): Promise<Array<Upgrade>> {
-    return new Promise((resolve, reject) => {});
+    return new Promise((_, __) => {});
   }
 }

@@ -1,4 +1,4 @@
-import {Suspense, useEffect, useMemo, useRef, useState} from 'react'
+import {Suspense, useEffect, useRef, useState} from 'react'
 import './App.css'
 import UpgradesShop from "./components/shop/UpgradesShop.jsx";
 import LoadingElement from "./components/structure/LoadingElement.jsx";

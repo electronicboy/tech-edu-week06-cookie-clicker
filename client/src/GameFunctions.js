@@ -159,7 +159,7 @@ export function handleUpgrade(existingGameState, updateGameState, upgrade) {
 const sounds = ["/sound/ui-click-43196.mp3", "/sound/ui-click-97915.mp3"]
 /**
  *
- * @param {updateGameState} gameState
+ * @param {updateGameState} updateGameState
  * @param {MouseEvent} event
  * @param {boolean} doSound
  */
@@ -197,7 +197,7 @@ export function handleClick(updateGameState, event, doSound) {
 
 /**
  *
- * @param {updateGameState} gameState
+ * @param {updateGameState} updateGameState
  * @param amount cookies to give
  */
 export function giveCookies(updateGameState, amount) {

@@ -7,6 +7,7 @@ import {formatCurrency} from "../../util.js";
  *
  * @param {gameState} gameState
  * @param {function} updateGamestate
+ * @param {MutableRefObject<boolean>}muteRef
  * @returns {JSX.Element}
  * @constructor
  */

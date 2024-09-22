@@ -23,11 +23,17 @@ export default function UpgradeItem({gameState, item, upgradeCB}) {
 }
 
 UpgradeItem.propTypes = {
+    gameState: PropTypes.object.isRequired,
     item: PropTypes.shape({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         cost: PropTypes.number.isRequired,
         increase: PropTypes.number.isRequired,
+        upgrade: PropTypes.arrayOf(PropTypes.shape({
+            amount: PropTypes.number,
+            type: PropTypes.number,
+            display: PropTypes.string
+        }))
     }),
     upgradeCB: PropTypes.func.isRequired,
 };
