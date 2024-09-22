@@ -26,6 +26,8 @@ function App() {
     const tick = useRef(0);
     const teardown = useRef(false);
     const mute = useRef(false);
+    const audioPlayer = useRef(new Audio("sound/cookies-11147.mp3"))
+
 
     // State
     const doReset = useRef(false)
@@ -55,11 +57,19 @@ function App() {
             }).catch(() => {
             setLoadingSuccess(false)
         });
+        audioPlayer.current.volume = 0.05;
     }, [])
 
     useEffect(() => {
         if (upgrades) {
             const intervalID = setInterval(() => {
+                if (audioPlayer.current.paused && !mute.current) {
+                    audioPlayer.current.play().catch(_ => console.log(_));
+                } else if (!audioPlayer.current.paused && mute.current) {
+                    audioPlayer.current.pause()
+                    audioPlayer.current.currentTime = 0
+                }
+
                 tick.current++
                 if (!teardown.current) {
                     tickLoop(tick.current, TPS, setGameState, upgradesDirty, upgrades)
@@ -75,7 +85,7 @@ function App() {
     return (
         <>
             <Suspense fallback={<LoadingElement loadingSuccess={loadingSuccess}/>}>
-                <Header resetFunct={resetGame} toggleMusic={toggleMusic} />
+                <Header resetFunct={resetGame} toggleMusic={toggleMusic}/>
                 <div className="container">
                     <Cookie gameState={gameState} updateGamestate={setGameState} muteRef={mute}/>
                     <UpgradesShop upgrades={upgrades} gameState={gameState} updateGamestate={setGameState}
